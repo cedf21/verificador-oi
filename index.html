@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verificador oi</title>
+    <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+    <div class='main'>
+        <div class="container">
+            <div class="header">
+                <h1>Verificador OI</h1>
+                <span> Respeitar o intervalo de consulta de 30 segundos...</span>
+            </div>
+            <div>
+                <input type="text" class="search" name="tel" id='tel' placeholder="71986325242">
+            </div>
+
+            <div>
+                <input type="submit" class="submit" id="sub" value='Consultar'/>
+            </div>
+        </div>
+    </div>
+    <script>
+        window.onload= function(){
+            document.getElementById("sub").addEventListener('click', function(){
+                telefone = document.getElementById("tel").value;
+                executeQueryTel(telefone);
+            });
+        }
+       
+
+
+       function executeQueryTel(telefone){
+        //    alert('teste')
+        var http = new XMLHttpRequest();
+        var url = 'api.php';
+        var params = 'tel=55'+telefone;
+        http.open('POST', url, true);
+        http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+        http.onreadystatechange = function() {
+            
+            if(http.readyState == 4 && http.status == 200) {
+                var response = JSON.parse(http.responseText);
+                if(response.success != undefined){
+                    alert("Este numero é oi")
+                }else if(response.error.code == 0){
+                    alert("Este numero não é oi")
+                }else{
+                    alert("Por favor espere: "+response.error.code)
+                }
+            }else{
+                // alert('Houve algum erro na requisição')
+            }
+        }
+        http.send(params);
+       }
+        </script>
+</body>
+</html>
